@@ -1,0 +1,58 @@
+[x-cloak] { display: none !important; }
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.bg-radial-glow {
+    background: radial-gradient(circle at center, rgba(249, 115, 22, 0.03) 0%, transparent 70%);
+}
+
+.bg-dot-grid {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.stroke-orange {
+    -webkit-text-stroke: 1px rgba(249, 115, 22, 0.4);
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f97316;
+}
+
+/* Responsive Grid Tweaks */
+@media (min-width: 768px) {
+    .md-h-fixed {
+        height: 750px;
+    }
+}
+
+.group:hover .group-hover-translate-x {
+    transform: translateX(8px);
+}
