@@ -1,13 +1,510 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hook Up Store | Trusted Marketplace Since 2018</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles for Hook Up Store */
+        :root {
+            --brand-accent: #ff3e00;
+        }
 
+        [x-cloak] { 
+            display: none !important; 
+        }
+
+        body {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 62, 0, 0.2) transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 62, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .nitro-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-blur: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nitro-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 62, 0, 0.05),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .nitro-card:hover::before {
+            left: 100%;
+        }
+
+        .skew-emphasis {
+            transform: skewX(-3deg);
+        }
+
+        .font-display {
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .font-accent {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .faq-content {
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+        }
+    </style>
+    <!-- Alpine.js for Interactivity -->
+    <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#020202',
+                            accent: '#ff3e00',
+                            secondary: '#5865f2',
+                            surface: '#0a0a0a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Lexend', 'sans-serif'],
+                        accent: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-bg text-white selection:bg-brand-accent selection:text-white font-sans overflow-x-hidden" x-data="appData()">
+    
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 -z-50 overflow-hidden bg-[#020202]">
+        <div class="absolute -top-[10%] -left-[5%] w-[80%] h-[80%] rounded-full bg-brand-accent/10 blur-[160px] animate-pulse"></div>
+        <div class="absolute -bottom-[20%] -right-[5%] w-[70%] h-[70%] rounded-full bg-brand-secondary/10 blur-[140px] animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,62,0,0.03),transparent_70%)]"></div>
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] pointer-events-none mix-blend-overlay"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-8 py-4 flex justify-between items-center bg-brand-bg/60 backdrop-blur-lg border-b border-white/5">
+        <div class="flex items-center gap-3">
+            <img :src="LOGO_URL" alt="Logo" class="w-10 h-10 object-contain brightness-125">
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- Language Switcher -->
+            <div class="flex bg-black/60 p-1 rounded-full border border-white/5 backdrop-blur-xl">
+                <button @click="lang = 'id'" :class="lang === 'id' ? 'bg-white text-black' : 'text-slate-400 hover:text-white'" class="flex items-center gap-2 px-4 py-1.5 rounded-full transition-all text-[11px] font-bold">
+                    <img src="https://flagcdn.com/id.svg" class="w-3.5 h-2.5 object-contain"> IND
+                </button>
+                <button @click="lang = 'en'" :class="lang === 'en' ? 'bg-white text-black' : 'text-slate-400 hover:text-white'" class="flex items-center gap-2 px-4 py-1.5 rounded-full transition-all text-[11px] font-bold">
+                    <img src="https://flagcdn.com/us.svg" class="w-3.5 h-2.5 object-contain"> ENG
+                </button>
+            </div>
+            <button class="hidden sm:block px-6 py-2.5 rounded-full bg-[#ff3e00] text-white text-[12px] font-black uppercase tracking-tight hover:brightness-110 active:scale-95 transition-all font-display">
+                <span x-text="t().joinBtn"></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative pt-48 pb-32 px-6 flex flex-col items-center text-center">
+            <div class="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/10 border border-brand-accent/20 text-brand-accent text-[10px] font-black tracking-widest uppercase">
+                <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                <span x-text="t().badge"></span>
+            </div>
+
+            <div class="relative mb-12">
+                <img :src="LOGO_URL" alt="Logo" class="w-32 h-32 md:w-48 md:h-48 drop-shadow-[0_0_50px_rgba(255,115,0,0.3)] animate-float">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-brand-accent/20 blur-[80px] -z-10 rounded-full opacity-50"></div>
+            </div>
+
+            <p class="max-w-xl text-lg text-slate-400 mb-12 font-medium" x-text="t().heroDesc"></p>
+
+            <div class="flex flex-col sm:flex-row gap-5">
+                <button @click="isCatalogOpen = true" class="group flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-brand-accent text-white font-black text-lg hover:shadow-[0_0_40px_rgba(255,62,0,0.4)] transition-all active:scale-95 font-display">
+                    <span x-text="t().exploreBtn"></span>
+                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                <button class="px-10 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md font-display">
+                    <span x-text="t().joinBtn"></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="bg-white/[0.02] border border-white/5 rounded-[48px] p-12 md:p-20">
+                    <div class="max-w-3xl">
+                        <h2 class="text-5xl md:text-7xl font-display font-black mb-8 tracking-tighter uppercase skew-x-[-3deg]" x-text="t().kenapaTitle"></h2>
+                        <p class="text-slate-400 text-lg md:text-xl font-medium leading-relaxed whitespace-pre-line" x-text="t().kenapaDesc"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vendors Section -->
+        <section class="py-32 px-6 max-w-7xl mx-auto">
+            <div class="text-center mb-24">
+                <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase mb-2" x-text="t().vendorsTitle"></h2>
+                <div class="h-1.5 w-24 bg-brand-accent mx-auto rounded-full"></div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-8">
+                <template x-for="(v, i) in t().vendorsList" :key="i">
+                    <div class="p-12 bg-white/[0.02] border border-white/5 rounded-[32px] hover:border-brand-accent/20 transition-all shadow-xl group">
+                        <span class="text-brand-accent font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">Partner Vendor</span>
+                        <h3 class="text-3xl font-bold mb-4 font-display group-hover:text-brand-accent transition-colors" x-text="v.name"></h3>
+                        <p class="text-slate-400 leading-relaxed" x-text="v.desc"></p>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-32 px-6 max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase skew-x-[-3deg]" x-text="t().featuresTitle"></h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template x-for="(f, i) in features" :key="i">
+                    <div :class="f.special ? 'bg-[#1a0a0a] border-[#301010] shadow-[0_20px_50px_rgba(255,62,0,0.05)]' : 'bg-[#111111] border-[#222222] hover:border-[#333333]'" 
+                         class="p-8 rounded-[24px] border transition-all duration-500 flex flex-col group">
+                        
+                        <div x-show="!f.special">
+                            <div class="text-3xl mb-6 group-hover:scale-110 transition-transform" x-text="f.icon"></div>
+                            <h3 class="text-lg font-bold mb-3 font-display" x-text="t()['feature'+(i+1)+'Title']"></h3>
+                            <p class="text-slate-400 text-sm font-medium" x-text="t()['feature'+(i+1)+'Desc']"></p>
+                        </div>
+
+                        <div x-show="f.special" class="h-full flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-6">
+                                    <span class="text-2xl" x-text="f.icon"></span>
+                                    <h3 class="text-lg font-bold font-display" x-text="t().feature6Title"></h3>
+                                </div>
+                                <p class="text-slate-400 text-sm font-medium" x-text="t().feature6Desc"></p>
+                            </div>
+                            <div class="mt-10">
+                                <button @click="isCatalogOpen = true" class="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff3e00] text-white font-bold text-sm tracking-tight hover:brightness-110 active:scale-95 transition-all">
+                                    <span x-text="t().joinBtn"></span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-32 px-6 max-w-4xl mx-auto">
+            <div class="text-center mb-24">
+                <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase skew-x-[-3deg]" x-text="t().faqTitle"></h2>
+            </div>
+            <div class="space-y-4">
+                <template x-for="(item, i) in t().faqList" :key="i">
+                    <div class="rounded-[32px] border bg-white/[0.02] border-white/5 overflow-hidden transition-all"
+                         :class="openFaq === i ? 'bg-white/[0.04] border-white/10 shadow-2xl' : ''">
+                        <button @click="openFaq = (openFaq === i ? null : i)" class="w-full px-8 py-6 flex items-center justify-between text-left">
+                            <h3 class="text-lg font-display font-bold" :class="openFaq === i ? 'text-white' : 'text-slate-300'" x-text="item.q"></h3>
+                            <i data-lucide="chevron-down" class="w-6 h-6 transition-transform duration-300" :class="openFaq === i ? 'rotate-180 text-brand-accent' : 'text-slate-500'"></i>
+                        </button>
+                        <div x-show="openFaq === i" x-collapse>
+                            <div class="px-8 pb-8">
+                                <p class="text-slate-400 leading-relaxed border-t border-white/5 pt-6" x-text="item.a"></p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-16 px-8 bg-brand-bg border-t border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
+                <div class="max-w-xs">
+                    <img :src="LOGO_URL" alt="Logo" class="w-12 h-12 mb-4">
+                    <p class="text-slate-500 text-xs italic" x-text="t().heroDesc"></p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-12 text-sm">
+                    <div>
+                        <h4 class="font-bold text-[10px] uppercase tracking-widest mb-6">Platform</h4>
+                        <ul class="space-y-3 text-slate-400">
+                            <li><a href="#" class="hover:text-brand-accent">Products</a></li>
+                            <li><a href="#" class="hover:text-brand-accent">Vendors</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-[10px] uppercase tracking-widest mb-6">Support</h4>
+                        <ul class="space-y-3 text-slate-400">
+                            <li><a href="#" class="hover:text-brand-accent">Ticket Hub</a></li>
+                            <li><a href="#" class="hover:text-brand-accent">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-[10px] uppercase tracking-widest mb-6">Legal</h4>
+                        <ul class="space-y-3 text-slate-400">
+                            <li><button @click="openLegal('tos')" class="hover:text-brand-accent">ToS</button></li>
+                            <li><button @click="openLegal('privacy')" class="hover:text-brand-accent">Privacy</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] tracking-widest uppercase">
+                <div class="text-slate-500 italic">© 2018 - 2026 HOOK UP STORE. ALL RIGHTS RESERVED.</div>
+                <div class="text-white font-bold" x-text="t().footerText"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Catalog Modal -->
+    <div x-show="isCatalogOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl" x-cloak>
+        <div @click.away="isCatalogOpen = false" class="w-full max-w-4xl h-[80vh] bg-[#0a0a0a] border border-white/10 rounded-[40px] flex flex-col overflow-hidden shadow-2xl">
+            <div class="p-8 border-b border-white/5 flex items-center justify-between">
+                <h2 class="text-2xl font-display font-black uppercase tracking-tighter skew-x-[-3deg]" x-text="t().catalogTitle"></h2>
+                <button @click="isCatalogOpen = false" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="p-8 overflow-y-auto flex-1 bg-white/[0.01]">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <template x-for="p in catalog" :key="p.name">
+                        <div class="p-6 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-brand-accent/40 transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="text-[10px] font-black text-brand-accent uppercase tracking-widest" x-text="p.category"></span>
+                                <template x-if="p.badge">
+                                    <span class="px-2 py-0.5 rounded-sm bg-brand-accent text-white text-[8px] font-black" x-text="p.badge"></span>
+                                </template>
+                            </div>
+                            <h4 class="text-white font-bold mb-1" x-text="p.name"></h4>
+                            <div class="text-slate-500 text-xs font-mono" x-text="p.price"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Modal -->
+    <div x-show="legalTab" class="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md" x-cloak>
+        <div @click.away="legalTab = null" class="w-full max-w-2xl h-[70vh] bg-[#0a0a0a] border border-white/10 rounded-[32px] flex flex-col overflow-hidden">
+            <div class="p-6 border-b border-white/5 flex items-center justify-between">
+                <h2 class="text-xl font-display font-black uppercase" x-text="legalTab ? t().legal[legalTab].title : ''"></h2>
+                <button @click="legalTab = null" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="p-8 overflow-y-auto flex-1 space-y-6">
+                <template x-if="legalTab" x-for="s in t().legal[legalTab].sections">
+                    <div>
+                        <h3 class="text-white font-bold mb-2 uppercase text-sm tracking-wide" x-text="s.h"></h3>
+                        <p class="text-slate-400 text-sm leading-relaxed" x-text="s.p"></p>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* Main Logic for Hook Up Store Standalone */
+        const LOGO_URL = "https://media.discordapp.net/attachments/1498058931665109043/1498059061890125954/HOOK_UP_PNG_1.png?ex=6a063138&is=6a04dfb8&hm=3635f69d4ad98d60a574bfca39da79ac8dd6cf42ce2c1cacb5031fb8dd51dd98&=&format=webp&quality=lossless&width=856&height=856";
+
+        const translations = {
+            id: {
+                badge: "MARKETPLACE PLATFORM TERPERCAYA SEJAK 2018",
+                heroTitle: "BIKIN TRANSAKSIMU MAKIN SERU",
+                heroDesc: "Marketplace ecosystem yang menghubungkan supplier terpercaya dengan buyer serius sejak tahun 2018.",
+                joinBtn: "Gabung Marketplace",
+                exploreBtn: "Eksplor Produk",
+                kenapaTitle: "TENTANG KAMI",
+                kenapaDesc: "HOOK UP hadir sebagai third-party marketplace & community platform yang mempertemukan vendor terpercaya dengan buyer dalam satu ecosystem yang aman, nyaman, dan terus berkembang.\n\nSejak berdiri pada tahun 2018, server ini telah berkembang dari sekadar komunitas kecil menjadi marketplace digital dengan berbagai layanan, vendor, automation system, serta workflow yang terus diperbarui mengikuti perkembangan kebutuhan market.",
+                vendorsTitle: "VENDORS",
+                featuresTitle: "KENAPA KAMI",
+                feature1Title: "Produk & Layanan Digital",
+                feature1Desc: "Akses eksklusif ke berbagai produk digital premium dengan harga kompetitif dan kualitas terjamin.",
+                feature2Title: "Ekosistem Vendor Terpercaya",
+                feature2Desc: "Bekerja sama hanya dengan vendor yang telah melewati verifikasi ketat untuk keamanan Anda.",
+                feature3Title: "Dukungan Tiket & Bantuan",
+                feature3Desc: "Layanan bantuan responsif melalui sistem tiket untuk menangani setiap kebutuhan transaksi Anda.",
+                feature4Title: "Update & Berita Marketplace",
+                feature4Desc: "Informasi real-time mengenai pembaruan sistem dan penawaran terbaru di ecosystem Hook Up.",
+                feature5Title: "Otomasi & Alur Kerja Modern",
+                feature5Desc: "Sistem cerdas yang memastikan setiap pesanan Anda diproses dengan kecepatan maksimal.",
+                feature6Title: "Platform Komunitas",
+                feature6Desc: "Hubungkan diri Anda dengan ribuan pengguna lain dalam komunitas digital yang aktif.",
+                faqTitle: "PERTANYAAN UMUM",
+                catalogTitle: "KATALOG PRODUK",
+                footerText: "Didesain dengan ❤️ oleh Hook Up Team.",
+                vendorsList: [
+                    { name: "Central Digital", desc: "Pusat layanan produk digital otomatis untuk kebutuhan top up, pulsa, data, e-wallet, dan berbagai produk digital lainnya." },
+                    { name: "Prime Deals", desc: "Tempat terpercaya untuk mendapatkan produk digital & fisik dengan harga terbaik." },
+                    { name: "VShop", desc: "Pusat layanan sosial media terpercaya untuk kebutuhan peningkatan followers, likes, views, dan engagement berbagai platform digital dengan sistem otomatis dan cepat." },
+                    { name: "Core Distributor", desc: "Distribusi impor fisik terpercaya berskala besar" }
+                ],
+                faqList: [
+                    { q: "APAKAH BELANJA DI SINI AMAN?", a: "Tentu saja. Hook Up telah berdiri sejak 2018 dan terus memprioritaskan keamanan serta pelayanan. Semua produk kami dijamin 100% legal dengan jaminan garansi penuh untuk kenyamanan Anda." },
+                    { q: "METODE PEMBAYARAN APA SAJA YANG TERSEDIA?", a: "Kami menyediakan sistem pembayaran otomatis melalui berbagai pilihan E-Wallet (Dana, OVO, GoPay) serta Bank transfer utama untuk memastikan proses yang cepat dan aman." },
+                    { q: "BAGAIMANA SISTEM GARANSI DI HOOK UP?", a: "Kami memberikan informasi transparan tentang perlindungan konsumen. Produk berlabel W (Warranty) mendapatkan perlindungan penuh sesuai masa berlaku yang tertera pada deskripsi produk." },
+                    { q: "BERAPA LAMA PROSES PENGERJAAN PESANAN?", a: "Sebagian besar layanan kami diproses secara otomatis dan instan (kilat). Informasi penanganan spesifik untuk setiap produk dapat Anda temukan pada bagian deskripsi." }
+                ],
+                legal: {
+                    tos: {
+                        title: "Terms of Service",
+                        sections: [
+                            { h: "Status Garansi", p: "Setiap produk memiliki keterangan: W = Warranty (bergansi), NW = No Warranty (tanpa garansi). Harap membaca deskripsi sebelum membeli." },
+                            { h: "Validitas Garansi", p: "Garansi hanya berlaku jika tidak ada perubahan data akun, tidak melanggar aturan penggunaan, dan menyertakan bukti valid." }
+                        ]
+                    },
+                    privacy: {
+                        title: "Privacy Policy",
+                        sections: [
+                            { h: "Keamanan Akun", p: "Setelah akun diterima, keamanan menjadi tanggung jawab pembeli sepenuhnya." },
+                            { h: "Penanganan Data", p: "Kami hanya menyimpan data transaksi untuk verifikasi garansi." }
+                        ]
+                    }
+                }
+            },
+            en: {
+                badge: "TRUSTED MARKETPLACE PLATFORM SINCE 2018",
+                heroTitle: "MAKE YOUR TRANSACTIONS MORE EXCITING",
+                heroDesc: "Marketplace ecosystem that connects trusted suppliers with serious buyers since 2018.",
+                joinBtn: "Join Marketplace",
+                exploreBtn: "Explore Products",
+                kenapaTitle: "ABOUT US",
+                kenapaDesc: "HOOK UP is a third-party marketplace & community platform that connects trusted vendors with buyers in an evolving, secure, and comfortable ecosystem.\n\nFounded in 2018, this server has grown from a small community into a digital marketplace with various services, vendors, automation, and ever-updating workflows following market needs.",
+                vendorsTitle: "VENDORS",
+                featuresTitle: "WHY CHOOSE US",
+                feature1Title: "Digital Products & Services",
+                feature1Desc: "Exclusive access to various premium digital products with competitive pricing and guaranteed quality.",
+                feature2Title: "Trusted Vendor Ecosystem",
+                feature2Desc: "Collaborating only with vendors who have passed strict verification for your security.",
+                feature3Title: "Ticket Support & Assistance",
+                feature3Desc: "Responsive help service through a ticket system to handle every transaction need.",
+                feature4Title: "Marketplace Updates & News",
+                feature4Desc: "Real-time info on system updates and latest offers in the Hook Up ecosystem.",
+                feature5Title: "Automation & Modern Workflow",
+                feature5Desc: "Intelligent systems ensuring every order is processed with maximum speed.",
+                feature6Title: "Community Platform",
+                feature6Desc: "Connect with thousands of other users in an active digital community.",
+                faqTitle: "GENERAL FAQ",
+                catalogTitle: "PRODUCT CATALOG",
+                footerText: "Designed with ❤️ by Hook Up Team.",
+                vendorsList: [
+                    { name: "Central Digital", desc: "Automated digital product center for top-ups, pulses, data, e-wallets, and various other digital products." },
+                    { name: "Prime Deals", desc: "Trusted place to get digital & physical products at the best prices." },
+                    { name: "VShop", desc: "Trusted social media service center for followers, likes, views, and engagement across digital platforms with fast automated systems." },
+                    { name: "Core Distributor", desc: "Large-scale trusted physical import distribution." }
+                ],
+                faqList: [
+                    { q: "IS IT SAFE TO SHOP HERE?", a: "Of course. Hook Up has been established since 2018 and consistently prioritizes security and service. All our products are guaranteed 100% legal with full warranty protection for your peace of mind." },
+                    { q: "WHAT PAYMENT METHODS ARE AVAILABLE?", a: "We provide automated payment systems through various E-Wallets (Dana, OVO, GoPay) and major Bank transfers to ensure a fast and secure process." },
+                    { q: "HOW DOES THE WARRANTY SYSTEM WORK?", a: "We provide transparent information about consumer protection. Products labeled with W (Warranty) receive full protection according to the period stated in the product description." },
+                    { q: "HOW LONG DOES THE ORDER PROCESS TAKE?", a: "Most of our services are processed automatically and instantly." }
+                ],
+                legal: {
+                    tos: {
+                        title: "Terms of Service",
+                        sections: [
+                            { h: "Warranty Status", p: "Each product includes warranty status: W = Warranty, NW = No Warranty." },
+                            { h: "Warranty Validity", p: "Warranty is only valid if: No account data has been changed." }
+                        ]
+                    },
+                    privacy: {
+                        title: "Privacy Policy",
+                        sections: [
+                            { h: "Account Security", p: "After delivery, account security becomes the buyer’s responsibility." },
+                            { h: "Data Protection", p: "We only store transaction data for warranty verification." }
+                        ]
+                    }
+                }
+            }
+        };
+
+        function appData() {
+            return {
+                lang: 'id',
+                isCatalogOpen: false,
+                legalTab: null,
+                openFaq: 0,
+                LOGO_URL: LOGO_URL,
+                features: [
+                    { icon: "📦", special: false },
+                    { icon: "🛡️", special: false },
+                    { icon: "🎫", special: false },
+                    { icon: "📢", special: false },
+                    { icon: "⚙️", special: false },
+                    { icon: "🤝", special: true }
+                ],
+                catalog: [
+                    { name: "Discord Nitro (1 Month/1 Year)", category: "Nitro", price: "Starts from Rp 55k", badge: "HOT" },
+                    { name: "Discord Server Boost (3 Months)", category: "Nitro", price: "Starts from Rp 25k", badge: "BEST" },
+                    { name: "Spotify Premium (Private)", category: "Apps", price: "Rp 15k", badge: null },
+                    { name: "Youtube Premium (Family/Private)", category: "Apps", price: "Rp 10k", badge: null },
+                    { name: "Valorant Points (Indo)", category: "Gaming", price: "Cheap", badge: "FAST" },
+                    { name: "Mobile Legends Diamonds", category: "Gaming", price: "Instant", badge: "AUTO" },
+                    { name: "Instagram Followers (HQ)", category: "SMM", price: "Rp 5k/1k", badge: null },
+                    { name: "TikTok Views & Likes", category: "SMM", price: "Cheapest", badge: null },
+                    { name: "Hosting CPanel", category: "Web", price: "Monthly/Yearly", badge: "NEW" },
+                ],
+                t() {
+                    return translations[this.lang];
+                },
+                init() {
+                    lucide.createIcons();
+                    this.$watch('lang', () => {
+                        this.$nextTick(() => lucide.createIcons());
+                    });
+                    this.$watch('isCatalogOpen', () => {
+                        this.$nextTick(() => lucide.createIcons());
+                    });
+                    this.$watch('legalTab', () => {
+                        this.$nextTick(() => lucide.createIcons());
+                    });
+                },
+                openLegal(tab) {
+                    this.legalTab = tab;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
