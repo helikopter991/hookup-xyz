@@ -18,6 +18,7 @@
         }
 
         body {
+            background-color: #020202;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 62, 0, 0.2) transparent;
         }
@@ -45,35 +46,8 @@
             100% { transform: translateY(0px); }
         }
 
-        .nitro-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%);
-            backdrop-blur: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nitro-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 62, 0, 0.05),
-                transparent
-            );
-            transition: 0.5s;
-        }
-
-        .nitro-card:hover::before {
-            left: 100%;
-        }
-
-        .skew-emphasis {
-            transform: skewX(-3deg);
+        .bg-view-glow {
+            background: radial-gradient(circle at center, rgba(255, 62, 0, 0.08) 0%, #020202 100%);
         }
 
         .font-display {
@@ -83,16 +57,12 @@
         .font-accent {
             font-family: 'Outfit', sans-serif;
         }
-
-        .faq-content {
-            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
-        }
     </style>
-    <!-- Alpine.js for Interactivity -->
+    <!-- Alpine.js Plugins -->
     <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.407.0/dist/umd/lucide.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -126,176 +96,254 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 px-8 py-4 flex justify-between items-center bg-brand-bg/60 backdrop-blur-lg border-b border-white/5">
-        <div class="flex items-center gap-3">
-            <img :src="LOGO_URL" alt="Logo" class="w-10 h-10 object-contain brightness-125">
+    <nav class="fixed top-0 w-full z-50 px-6 md:px-12 py-6 flex justify-between items-center bg-brand-bg/60 backdrop-blur-md border-b border-white/5">
+        <div class="flex items-center">
+            <img :src="LOGO_URL" alt="Logo" class="w-8 h-8 object-contain">
         </div>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-6">
             <!-- Language Switcher -->
-            <div class="flex bg-black/60 p-1 rounded-full border border-white/5 backdrop-blur-xl">
-                <button @click="lang = 'id'" :class="lang === 'id' ? 'bg-white text-black' : 'text-slate-400 hover:text-white'" class="flex items-center gap-2 px-4 py-1.5 rounded-full transition-all text-[11px] font-bold">
-                    <img src="https://flagcdn.com/id.svg" class="w-3.5 h-2.5 object-contain"> IND
+            <div class="flex items-center bg-black/40 p-1 rounded-full border border-white/10 backdrop-blur-md">
+                <button @click="lang = 'id'" 
+                        :class="lang === 'id' ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-slate-400 hover:text-white'" 
+                        class="flex items-center gap-2 px-4 py-2 rounded-full transition-all text-[11px] font-black uppercase tracking-wider">
+                    <img src="https://flagcdn.com/id.svg" class="w-4 h-3 object-contain"> IND
                 </button>
-                <button @click="lang = 'en'" :class="lang === 'en' ? 'bg-white text-black' : 'text-slate-400 hover:text-white'" class="flex items-center gap-2 px-4 py-1.5 rounded-full transition-all text-[11px] font-bold">
-                    <img src="https://flagcdn.com/us.svg" class="w-3.5 h-2.5 object-contain"> ENG
+                <button @click="lang = 'en'" 
+                        :class="lang === 'en' ? 'bg-white text-black shadow-lg shadow-white/10' : 'text-slate-400 hover:text-white'" 
+                        class="flex items-center gap-2 px-4 py-2 rounded-full transition-all text-[11px] font-black uppercase tracking-wider">
+                    <img src="https://flagcdn.com/us.svg" class="w-4 h-3 object-contain"> ENG
                 </button>
             </div>
-            <button class="hidden sm:block px-6 py-2.5 rounded-full bg-[#ff3e00] text-white text-[12px] font-black uppercase tracking-tight hover:brightness-110 active:scale-95 transition-all font-display">
+            <a href="https://discord.gg/8CAc4uMfF8" target="_blank" class="hidden md:block px-8 py-3 rounded-full bg-[#ff3e00] text-white text-[12px] font-black uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all font-display shadow-[0_0_20px_rgba(255,62,0,0.3)] flex items-center justify-center">
                 <span x-text="t().joinBtn"></span>
-            </button>
+            </a>
         </div>
     </nav>
 
     <main>
         <!-- Hero Section -->
-        <section class="relative pt-48 pb-32 px-6 flex flex-col items-center text-center">
-            <div class="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/10 border border-brand-accent/20 text-brand-accent text-[10px] font-black tracking-widest uppercase">
-                <i data-lucide="star" class="w-3 h-3 fill-current"></i>
-                <span x-text="t().badge"></span>
+        <section class="relative min-h-screen flex flex-col items-center justify-center pt-20 px-6 text-center bg-view-glow">
+            <!-- Badge -->
+            <div class="mb-16 inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-brand-accent/30 text-brand-accent bg-transparent">
+                <i data-lucide="star" class="w-3.5 h-3.5 fill-brand-accent"></i>
+                <span class="text-[11px] font-black tracking-[0.2em] uppercase" x-text="t().badge"></span>
+            </div>
+            
+            <!-- Central Logo -->
+            <div class="relative mb-20 group">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-brand-accent/20 blur-[120px] rounded-full opacity-40 group-hover:opacity-60 transition-opacity"></div>
+                <img :src="LOGO_URL" alt="Logo" class="relative z-10 w-48 h-48 md:w-80 md:h-80 object-contain brightness-110 drop-shadow-[0_0_80px_rgba(255,62,0,0.3)] select-none">
             </div>
 
-            <div class="relative mb-12">
-                <img :src="LOGO_URL" alt="Logo" class="w-32 h-32 md:w-48 md:h-48 drop-shadow-[0_0_50px_rgba(255,115,0,0.3)] animate-float">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-brand-accent/20 blur-[80px] -z-10 rounded-full opacity-50"></div>
-            </div>
+            <!-- Description -->
+            <p class="max-w-2xl text-lg md:text-xl text-slate-300/80 mb-16 font-medium leading-relaxed px-4" x-text="t().heroDesc"></p>
 
-            <p class="max-w-xl text-lg text-slate-400 mb-12 font-medium" x-text="t().heroDesc"></p>
-
-            <div class="flex flex-col sm:flex-row gap-5">
-                <button @click="isCatalogOpen = true" class="group flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-brand-accent text-white font-black text-lg hover:shadow-[0_0_40px_rgba(255,62,0,0.4)] transition-all active:scale-95 font-display">
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row items-center gap-6">
+                <button @click="isCatalogOpen = true" class="group flex items-center justify-center gap-3 px-12 py-5 rounded-full bg-brand-accent text-white font-black text-lg transition-all hover:scale-105 active:scale-95 font-display shadow-[0_10px_50px_rgba(255,62,0,0.3)]">
                     <span x-text="t().exploreBtn"></span>
-                    <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    <i data-lucide="arrow-right" class="w-6 h-6 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <button class="px-10 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-md font-display">
+                <a href="https://discord.gg/8CAc4uMfF8" target="_blank" class="px-12 py-5 rounded-full bg-[#0a0a0a]/40 border border-white/10 text-white font-black text-lg transition-all hover:bg-white/5 hover:border-white/20 active:scale-95 font-display backdrop-blur-md shadow-2xl flex items-center justify-center">
                     <span x-text="t().joinBtn"></span>
-                </button>
+                </a>
             </div>
         </section>
 
         <!-- About Section -->
-        <section class="py-32 px-6">
+        <section class="py-40 px-6 bg-[#0d0d0d] border-y border-white/[0.05] relative">
+            <!-- Subtle Top Glow/Divider -->
+            <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-accent/20 to-transparent"></div>
+            
             <div class="max-w-7xl mx-auto">
-                <div class="bg-white/[0.02] border border-white/5 rounded-[48px] p-12 md:p-20">
-                    <div class="max-w-3xl">
-                        <h2 class="text-5xl md:text-7xl font-display font-black mb-8 tracking-tighter uppercase skew-x-[-3deg]" x-text="t().kenapaTitle"></h2>
-                        <p class="text-slate-400 text-lg md:text-xl font-medium leading-relaxed whitespace-pre-line" x-text="t().kenapaDesc"></p>
+                <div class="max-w-4xl">
+                    <h2 class="text-6xl md:text-8xl font-display font-black mb-12 tracking-tight uppercase text-white" x-text="t().kenapaTitle"></h2>
+                    <div class="space-y-8">
+                        <template x-for="paragraph in t().kenapaDesc.split('\n\n')">
+                            <p class="text-slate-400 text-lg md:text-xl font-medium leading-relaxed" x-text="paragraph"></p>
+                        </template>
                     </div>
+                </div>
+            </div>
+
+            <!-- Subtle Bottom Glow/Divider -->
+            <div class="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-accent/10 to-transparent"></div>
+        </section>
+
+        <!-- Vendors Section -->
+        <section id="vendors" class="py-32 px-6 bg-view-glow">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-24">
+                    <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase mb-2" x-text="t().vendorsTitle"></h2>
+                    <div class="h-1.5 w-24 bg-brand-accent mx-auto rounded-full"></div>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-8">
+                    <template x-for="(v, i) in t().vendorsList" :key="i">
+                        <div class="p-12 bg-white/[0.02] border border-white/5 rounded-[32px] hover:border-brand-accent/20 transition-all shadow-xl group">
+                            <span class="text-brand-accent font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">Partner Vendor</span>
+                            <h3 class="text-3xl font-bold mb-4 font-display group-hover:text-brand-accent transition-colors" x-text="v.name"></h3>
+                            <p class="text-slate-400 leading-relaxed" x-text="v.desc"></p>
+                        </div>
+                    </template>
                 </div>
             </div>
         </section>
 
-        <!-- Vendors Section -->
-        <section class="py-32 px-6 max-w-7xl mx-auto">
-            <div class="text-center mb-24">
-                <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase mb-2" x-text="t().vendorsTitle"></h2>
-                <div class="h-1.5 w-24 bg-brand-accent mx-auto rounded-full"></div>
-            </div>
-            <div class="grid sm:grid-cols-2 gap-8">
-                <template x-for="(v, i) in t().vendorsList" :key="i">
-                    <div class="p-12 bg-white/[0.02] border border-white/5 rounded-[32px] hover:border-brand-accent/20 transition-all shadow-xl group">
-                        <span class="text-brand-accent font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">Partner Vendor</span>
-                        <h3 class="text-3xl font-bold mb-4 font-display group-hover:text-brand-accent transition-colors" x-text="v.name"></h3>
-                        <p class="text-slate-400 leading-relaxed" x-text="v.desc"></p>
-                    </div>
-                </template>
-            </div>
-        </section>
-
         <!-- Features Section -->
-        <section class="py-32 px-6 max-w-7xl mx-auto">
-            <div class="mb-16">
-                <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase skew-x-[-3deg]" x-text="t().featuresTitle"></h2>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <template x-for="(f, i) in features" :key="i">
-                    <div :class="f.special ? 'bg-[#1a0a0a] border-[#301010] shadow-[0_20px_50px_rgba(255,62,0,0.05)]' : 'bg-[#111111] border-[#222222] hover:border-[#333333]'" 
-                         class="p-8 rounded-[24px] border transition-all duration-500 flex flex-col group">
-                        
-                        <div x-show="!f.special">
-                            <div class="text-3xl mb-6 group-hover:scale-110 transition-transform" x-text="f.icon"></div>
-                            <h3 class="text-lg font-bold mb-3 font-display" x-text="t()['feature'+(i+1)+'Title']"></h3>
-                            <p class="text-slate-400 text-sm font-medium" x-text="t()['feature'+(i+1)+'Desc']"></p>
-                        </div>
+        <section class="py-32 px-6 bg-view-glow">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-16">
+                    <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase skew-x-[-3deg]" x-text="t().featuresTitle"></h2>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <template x-for="(f, i) in features" :key="i">
+                        <div :class="f.special ? 'bg-[#1a0a0a] border-[#301010] shadow-[0_20px_50px_rgba(255,62,0,0.05)]' : 'bg-[#111111] border-[#222222] hover:border-[#333333]'" 
+                             class="p-8 rounded-[24px] border transition-all duration-500 flex flex-col group">
+                            
+                            <div x-show="!f.special">
+                                <div class="text-3xl mb-6 group-hover:scale-110 transition-transform" x-text="f.icon"></div>
+                                <h3 class="text-lg font-bold mb-3 font-display" x-text="t()['feature'+(i+1)+'Title']"></h3>
+                                <p class="text-slate-400 text-sm font-medium" x-text="t()['feature'+(i+1)+'Desc']"></p>
+                            </div>
 
-                        <div x-show="f.special" class="h-full flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center gap-3 mb-6">
-                                    <span class="text-2xl" x-text="f.icon"></span>
-                                    <h3 class="text-lg font-bold font-display" x-text="t().feature6Title"></h3>
+                            <div x-show="f.special" class="h-full flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <span class="text-2xl" x-text="f.icon"></span>
+                                        <h3 class="text-lg font-bold font-display" x-text="t().feature6Title"></h3>
+                                    </div>
+                                    <p class="text-slate-400 text-sm font-medium" x-text="t().feature6Desc"></p>
                                 </div>
-                                <p class="text-slate-400 text-sm font-medium" x-text="t().feature6Desc"></p>
-                            </div>
-                            <div class="mt-10">
-                                <button @click="isCatalogOpen = true" class="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff3e00] text-white font-bold text-sm tracking-tight hover:brightness-110 active:scale-95 transition-all">
-                                    <span x-text="t().joinBtn"></span>
-                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                                </button>
+                                <div class="mt-10">
+                                    <a href="https://discord.gg/8CAc4uMfF8" target="_blank" class="flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#ff3e00] text-white font-bold text-sm tracking-tight hover:brightness-110 active:scale-95 transition-all">
+                                        <span x-text="t().joinBtn"></span>
+                                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </div>
         </section>
 
         <!-- FAQ Section -->
-        <section class="py-32 px-6 max-w-4xl mx-auto">
-            <div class="text-center mb-24">
-                <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase skew-x-[-3deg]" x-text="t().faqTitle"></h2>
-            </div>
-            <div class="space-y-4">
-                <template x-for="(item, i) in t().faqList" :key="i">
-                    <div class="rounded-[32px] border bg-white/[0.02] border-white/5 overflow-hidden transition-all"
-                         :class="openFaq === i ? 'bg-white/[0.04] border-white/10 shadow-2xl' : ''">
-                        <button @click="openFaq = (openFaq === i ? null : i)" class="w-full px-8 py-6 flex items-center justify-between text-left">
-                            <h3 class="text-lg font-display font-bold" :class="openFaq === i ? 'text-white' : 'text-slate-300'" x-text="item.q"></h3>
-                            <i data-lucide="chevron-down" class="w-6 h-6 transition-transform duration-300" :class="openFaq === i ? 'rotate-180 text-brand-accent' : 'text-slate-500'"></i>
-                        </button>
-                        <div x-show="openFaq === i" x-collapse>
-                            <div class="px-8 pb-8">
-                                <p class="text-slate-400 leading-relaxed border-t border-white/5 pt-6" x-text="item.a"></p>
+        <section class="py-32 px-6 bg-view-glow">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-24">
+                    <h2 class="text-5xl md:text-7xl font-display font-black leading-tight tracking-tighter uppercase skew-x-[-3deg]" x-text="t().faqTitle"></h2>
+                </div>
+                <div class="space-y-4">
+                    <template x-for="(item, i) in t().faqList" :key="i">
+                        <div class="rounded-[32px] border bg-white/[0.02] border-white/5 overflow-hidden transition-all"
+                             :class="openFaq === i ? 'bg-white/[0.04] border-white/10 shadow-2xl' : ''">
+                            <button @click="openFaq = (openFaq === i ? null : i)" class="w-full px-8 py-6 flex items-center justify-between text-left">
+                                <h3 class="text-lg font-display font-bold" :class="openFaq === i ? 'text-white' : 'text-slate-300'" x-text="item.q"></h3>
+                                <i data-lucide="chevron-down" class="w-6 h-6 transition-transform duration-300" :class="openFaq === i ? 'rotate-180 text-brand-accent' : 'text-slate-500'"></i>
+                            </button>
+                            <div x-show="openFaq === i" x-collapse>
+                                <div class="px-8 pb-8">
+                                    <p class="text-slate-400 leading-relaxed border-t border-white/5 pt-6" x-text="item.a"></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="py-16 px-8 bg-brand-bg border-t border-white/5">
+    <footer class="pt-24 pb-12 px-8 bg-[#0a0a0a]">
         <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
-                <div class="max-w-xs">
-                    <img :src="LOGO_URL" alt="Logo" class="w-12 h-12 mb-4">
-                    <p class="text-slate-500 text-xs italic" x-text="t().heroDesc"></p>
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-16 mb-24">
+                <div class="max-w-sm">
+                    <img :src="LOGO_URL" alt="Logo" class="w-16 h-16 mb-8 drop-shadow-[0_0_20px_rgba(255,62,0,0.3)]">
+                    <p class="text-slate-500 text-sm italic font-medium leading-relaxed" x-text="t().footerDesc"></p>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-12 text-sm">
-                    <div>
-                        <h4 class="font-bold text-[10px] uppercase tracking-widest mb-6">Platform</h4>
-                        <ul class="space-y-3 text-slate-400">
-                            <li><a href="#" class="hover:text-brand-accent">Products</a></li>
-                            <li><a href="#" class="hover:text-brand-accent">Vendors</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-[10px] uppercase tracking-widest mb-6">Support</h4>
-                        <ul class="space-y-3 text-slate-400">
-                            <li><a href="#" class="hover:text-brand-accent">Ticket Hub</a></li>
-                            <li><a href="#" class="hover:text-brand-accent">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-[10px] uppercase tracking-widest mb-6">Legal</h4>
-                        <ul class="space-y-3 text-slate-400">
-                            <li><button @click="openLegal('tos')" class="hover:text-brand-accent">ToS</button></li>
-                            <li><button @click="openLegal('privacy')" class="hover:text-brand-accent">Privacy</button></li>
-                        </ul>
-                    </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-12 sm:gap-24">
+                    <template x-for="(section, key) in t().footerLinks" :key="key">
+                        <div>
+                            <h4 class="font-display font-black text-xs uppercase tracking-[0.2em] mb-10 text-white" x-text="section.title"></h4>
+                            <ul class="space-y-4">
+                                <template x-for="link in section.links" :key="link.name">
+                                    <li>
+                                        <template x-if="link.url === 'products-choice'">
+                                            <div class="relative inline-block" x-data="{ open: false }" @click.outside="open = false">
+                                                <button @click="open = !open" class="text-slate-400 hover:text-white transition-colors text-sm font-medium whitespace-nowrap flex items-center gap-1 group">
+                                                    <span x-text="link.name"></span>
+                                                    <i data-lucide="chevron-up" class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                                                </button>
+                                                <div x-show="open" 
+                                                     x-transition:enter="transition ease-out duration-100"
+                                                     x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                                                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                                     class="absolute bottom-full mb-2 left-0 bg-[#0a0a0a] border border-white/10 rounded-xl p-1.5 shadow-2xl z-50 min-w-[160px] backdrop-blur-xl">
+                                                    <a href="https://id.shp.ee/xR3YhRQT" target="_blank" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-slate-300 hover:text-white text-sm">
+                                                        <div class="w-6 h-6 flex items-center justify-center rounded-md bg-orange-500/10 text-orange-500">
+                                                            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                                        </div>
+                                                        Shopee
+                                                    </a>
+                                                    <a href="https://discord.gg/8CAc4uMfF8" target="_blank" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-slate-300 hover:text-white text-sm">
+                                                        <div class="w-6 h-6 flex items-center justify-center rounded-md bg-indigo-500/10 text-indigo-500">
+                                                            <i data-lucide="discord" class="w-4 h-4"></i>
+                                                        </div>
+                                                        Discord
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template x-if="link.url === 'help-choice'">
+                                            <div class="relative inline-block" x-data="{ open: false }" @click.outside="open = false">
+                                                <button @click="open = !open" class="text-slate-400 hover:text-white transition-colors text-sm font-medium whitespace-nowrap flex items-center gap-1 group">
+                                                    <span x-text="link.name"></span>
+                                                    <i data-lucide="chevron-up" class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                                                </button>
+                                                <div x-show="open" 
+                                                     x-transition:enter="transition ease-out duration-100"
+                                                     x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+                                                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                                     class="absolute bottom-full mb-2 left-0 bg-[#0a0a0a] border border-white/10 rounded-xl p-1.5 shadow-2xl z-50 min-w-[160px] backdrop-blur-xl">
+                                                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-slate-300 hover:text-white text-sm">
+                                                        <div class="w-6 h-6 flex items-center justify-center rounded-md bg-brand-accent/10 text-brand-accent">
+                                                            <i data-lucide="user" class="w-4 h-4"></i>
+                                                        </div>
+                                                        xiivu
+                                                    </a>
+                                                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-slate-300 hover:text-white text-sm">
+                                                        <div class="w-6 h-6 flex items-center justify-center rounded-md bg-brand-accent/10 text-brand-accent">
+                                                            <i data-lucide="user" class="w-4 h-4"></i>
+                                                        </div>
+                                                        xiilit
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template x-if="link.url === 'tos' || link.url === 'privacy' || link.url === 'refund'">
+                                            <button @click="openLegal(link.url)" class="text-slate-400 hover:text-white transition-colors text-sm font-medium whitespace-nowrap" x-text="link.name"></button>
+                                        </template>
+                                        <template x-if="link.url !== 'tos' && link.url !== 'privacy' && link.url !== 'refund' && link.url !== 'products-choice' && link.url !== 'help-choice'">
+                                            <a :href="link.url" class="text-slate-400 hover:text-white transition-colors text-sm font-medium whitespace-nowrap" x-text="link.name"></a>
+                                        </template>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </template>
                 </div>
             </div>
-            <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] tracking-widest uppercase">
-                <div class="text-slate-500 italic">© 2018 - 2026 HOOK UP STORE. ALL RIGHTS RESERVED.</div>
-                <div class="text-white font-bold" x-text="t().footerText"></div>
+
+            <div class="pt-12 border-t border-white/[0.05] flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-white font-bold italic tracking-wider text-[11px] uppercase opacity-90">
+                    © 2018 - 2026 HOOK UP STORE. ALL RIGHTS RESERVED.
+                </div>
+                <div class="text-white font-bold italic text-[11px] flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-all">
+                    <span x-text="t().footerText.split('❤️')[0]"></span>
+                    <span class="text-brand-accent not-italic">❤️</span>
+                    <span x-text="t().footerText.split('❤️')[1]"></span>
+                </div>
             </div>
         </div>
     </footer>
@@ -334,7 +382,7 @@
                 <button @click="legalTab = null" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div class="p-8 overflow-y-auto flex-1 space-y-6">
-                <template x-if="legalTab" x-for="s in t().legal[legalTab].sections">
+                <template x-for="s in (legalTab ? t().legal[legalTab].sections : [])">
                     <div>
                         <h3 class="text-white font-bold mb-2 uppercase text-sm tracking-wide" x-text="s.h"></h3>
                         <p class="text-slate-400 text-sm leading-relaxed" x-text="s.p"></p>
@@ -362,18 +410,45 @@
                 feature1Title: "Produk & Layanan Digital",
                 feature1Desc: "Akses eksklusif ke berbagai produk digital premium dengan harga kompetitif dan kualitas terjamin.",
                 feature2Title: "Ekosistem Vendor Terpercaya",
-                feature2Desc: "Bekerja sama hanya dengan vendor yang telah melewati verifikasi ketat untuk keamanan Anda.",
+                feature2Desc: "Bekerja sama hanya with vendor yang telah melewati verifikasi ketat for keamanan Anda.",
                 feature3Title: "Dukungan Tiket & Bantuan",
-                feature3Desc: "Layanan bantuan responsif melalui sistem tiket untuk menangani setiap kebutuhan transaksi Anda.",
+                feature3Desc: "Layanan bantuan responsif through sistem tiket for menangani setiap kebutuhan transaksi Anda.",
                 feature4Title: "Update & Berita Marketplace",
-                feature4Desc: "Informasi real-time mengenai pembaruan sistem dan penawaran terbaru di ecosystem Hook Up.",
+                feature4Desc: "Informasi real-time regarding pembaruan sistem and penawaran terbaru in ecosystem Hook Up.",
                 feature5Title: "Otomasi & Alur Kerja Modern",
-                feature5Desc: "Sistem cerdas yang memastikan setiap pesanan Anda diproses dengan kecepatan maksimal.",
+                feature5Desc: "Sistem cerdas yang memastikan setiap pesanan Anda diproses with kecepatan maksimal.",
                 feature6Title: "Platform Komunitas",
-                feature6Desc: "Hubungkan diri Anda dengan ribuan pengguna lain dalam komunitas digital yang aktif.",
+                feature6Desc: "Hubungkan diri Anda with ribuan pengguna lain in komunitas digital yang aktif.",
                 faqTitle: "PERTANYAAN UMUM",
                 catalogTitle: "KATALOG PRODUK",
                 footerText: "Didesain dengan ❤️ oleh Hook Up Team.",
+                footerDesc: "Marketplace ecosystem yang menghubungkan supplier terpercaya dengan buyer serius sejak tahun 2018.",
+                footerLinks: {
+                    platform: {
+                        title: "PLATFORM",
+                        links: [
+                            { name: "Products", url: "products-choice" },
+                            { name: "Vendors", url: "#vendors" },
+                            { name: "Community", url: "#" }
+                        ]
+                    },
+                    support: {
+                        title: "SUPPORT",
+                        links: [
+                            { name: "Help Center", url: "help-choice" },
+                            { name: "Ticket Hub", url: "#" },
+                            { name: "Contact Us", url: "#" }
+                        ]
+                    },
+                    legal: {
+                        title: "LEGAL",
+                        links: [
+                            { name: "Terms of Service", url: "tos" },
+                            { name: "Privacy Policy", url: "privacy" },
+                            { name: "Refund Policy", url: "refund" }
+                        ]
+                    }
+                },
                 vendorsList: [
                     { name: "Central Digital", desc: "Pusat layanan produk digital otomatis untuk kebutuhan top up, pulsa, data, e-wallet, dan berbagai produk digital lainnya." },
                     { name: "Prime Deals", desc: "Tempat terpercaya untuk mendapatkan produk digital & fisik dengan harga terbaik." },
@@ -390,15 +465,28 @@
                     tos: {
                         title: "Terms of Service",
                         sections: [
-                            { h: "Status Garansi", p: "Setiap produk memiliki keterangan: W = Warranty (bergansi), NW = No Warranty (tanpa garansi). Harap membaca deskripsi sebelum membeli." },
-                            { h: "Validitas Garansi", p: "Garansi hanya berlaku jika tidak ada perubahan data akun, tidak melanggar aturan penggunaan, dan menyertakan bukti valid." }
+                            { h: "Layanan Hook Up", p: "HOOK UP adalah third-party marketplace platform yang mempertemukan buyer dan supplier/vendor digital. Kami bukan pemilik seluruh produk dan hanya bertindak sebagai perantara transaksi." },
+                            { h: "Status Vendor", p: "VERIFIED Vendor telah melewati proses verifikasi ketat. Kami tetap menyediakan bantuan mediasi jika diperlukan untuk kenyamanan transaksi Anda." },
+                            { h: "Status Garansi", p: "W = Warranty, NW = No Warranty. Garansi berlaku jika tidak mengubah data akun, tidak melanggar rules, serta menyertakan bukti valid." },
+                            { h: "Pengiriman & Klaim", p: "Waktu pengiriman tergantung vendor/supplier. Klaim wajib menyertakan Screenshot, Video bukti, dan Invoice / Order ID." },
+                            { h: "Tanggung Jawab Pembeli", p: "Buyer bertanggung jawab atas data yang diberikan, keamanan akun setelah delivery, dan kesalahan pembelian." },
+                            { h: "Aktivitas Terlarang", p: "Dilarang keras melakukan chargeback sepihak, fraud/scam, atau aktivitas ilegal. Pelanggaran dapat menyebabkan blacklist permanen." },
+                            { h: "Ketentuan Produk Digital", p: "Ketentuan Discord Nitro, Game Currency, dan License Ledger berlaku. Setelah digunakan atau redeem berhasil, warranty dianggap void." },
+                            { h: "Catatan Penting", p: "Order dianggap serius. No complain berarti transaksi selesai. HOOK UP berhak mengubah rules kapan saja tanpa pemberitahuan." }
                         ]
                     },
                     privacy: {
                         title: "Privacy Policy",
                         sections: [
-                            { h: "Keamanan Akun", p: "Setelah akun diterima, keamanan menjadi tanggung jawab pembeli sepenuhnya." },
-                            { h: "Penanganan Data", p: "Kami hanya menyimpan data transaksi untuk verifikasi garansi." }
+                            { h: "Keamanan Akun", p: "HOOK UP tidak bertanggung jawab atas account hijack setelah delivery, kesalahan penyimpanan, atau kebocoran data buyer." },
+                            { h: "Perlindungan Data", p: "Kami hanya menyimpan data transaksi untuk verifikasi garansi dan perlindungan privasi pengguna di dalam ekosistem." }
+                        ]
+                    },
+                    refund: {
+                        title: "Refund Policy",
+                        sections: [
+                            { h: "No Full Refund Policy", p: "Tidak ada refund penuh kecuali ada kesepakatan tertentu. Tidak ada refund untuk salah beli, berubah pikiran, atau akun terkena limit platform." },
+                            { h: "Proses Refund", p: "Proses pengembalian dana memakan waktu 1-3 hari kerja setelah disetujui melalui sistem tiket resmi kami." }
                         ]
                     }
                 }
@@ -428,6 +516,33 @@
                 faqTitle: "GENERAL FAQ",
                 catalogTitle: "PRODUCT CATALOG",
                 footerText: "Designed with ❤️ by Hook Up Team.",
+                footerDesc: "Marketplace ecosystem that connects trusted suppliers with serious buyers since 2018.",
+                footerLinks: {
+                    platform: {
+                        title: "PLATFORM",
+                        links: [
+                            { name: "Products", url: "products-choice" },
+                            { name: "Vendors", url: "#vendors" },
+                            { name: "Community", url: "#" }
+                        ]
+                    },
+                    support: {
+                        title: "SUPPORT",
+                        links: [
+                            { name: "Help Center", url: "help-choice" },
+                            { name: "Ticket Hub", url: "#" },
+                            { name: "Contact Us", url: "#" }
+                        ]
+                    },
+                    legal: {
+                        title: "LEGAL",
+                        links: [
+                            { name: "Terms of Service", url: "tos" },
+                            { name: "Privacy Policy", url: "privacy" },
+                            { name: "Refund Policy", url: "refund" }
+                        ]
+                    }
+                },
                 vendorsList: [
                     { name: "Central Digital", desc: "Automated digital product center for top-ups, pulses, data, e-wallets, and various other digital products." },
                     { name: "Prime Deals", desc: "Trusted place to get digital & physical products at the best prices." },
@@ -444,15 +559,28 @@
                     tos: {
                         title: "Terms of Service",
                         sections: [
-                            { h: "Warranty Status", p: "Each product includes warranty status: W = Warranty, NW = No Warranty." },
-                            { h: "Warranty Validity", p: "Warranty is only valid if: No account data has been changed." }
+                            { h: "Hook Up Services", p: "HOOK UP is a third-party marketplace platform connecting buyers and digital suppliers. We only act as an intermediary for transactions." },
+                            { h: "Vendor Status", p: "VERIFIED Vendors have passed strict verification. Our staff remains available for mediation if necessary to ensure security." },
+                            { h: "Warranty Status", p: "W = Warranty, NW = No Warranty. Warranty is valid if account data remains unchanged and valid proof is provided." },
+                            { h: "Delivery & Claim", p: "Delivery time varies by vendor. Claims must include Screenshots, Video proof, and a valid Invoice / Order ID." },
+                            { h: "Buyer Responsibility", p: "Buyers are responsible for the data provided, account security after delivery, and purchase errors." },
+                            { h: "Prohibited Activity", p: "Unilateral chargebacks, fraud/scam, and illegal activities are strictly forbidden and may lead to permanent blacklist." },
+                            { h: "Digital Product Terms", p: "Specific terms apply to Nitro, Currency, and Licenses. Warranty is void once the product is redeemed or used." },
+                            { h: "Important Notes", p: "An order is a commitment to buy. No response within specified time counts as delivery accepted. Rules may change without notice." }
                         ]
                     },
                     privacy: {
                         title: "Privacy Policy",
                         sections: [
-                            { h: "Account Security", p: "After delivery, account security becomes the buyer’s responsibility." },
-                            { h: "Data Protection", p: "We only store transaction data for warranty verification." }
+                            { h: "Account Security", p: "HOOK UP is not responsible for account hijacking after delivery, storage errors, or buyer data leaks." },
+                            { h: "Data Protection", p: "Transaction data is stored only for warranty verification and ecosystem security purposes." }
+                        ]
+                    },
+                    refund: {
+                        title: "Refund Policy",
+                        sections: [
+                            { h: "No Full Refund Policy", p: "Full refunds are not provided unless specifically agreed upon. No refunds for wrong purchases or platform-related bans." },
+                            { h: "Refund Process", p: "Refund processes take 1-3 business days after approval through our official ticket system." }
                         ]
                     }
                 }
@@ -489,15 +617,19 @@
                     return translations[this.lang];
                 },
                 init() {
-                    lucide.createIcons();
+                    this.$nextTick(() => {
+                        if (window.lucide) {
+                            window.lucide.createIcons();
+                        }
+                    });
                     this.$watch('lang', () => {
-                        this.$nextTick(() => lucide.createIcons());
+                        this.$nextTick(() => window.lucide && window.lucide.createIcons());
                     });
                     this.$watch('isCatalogOpen', () => {
-                        this.$nextTick(() => lucide.createIcons());
+                        this.$nextTick(() => window.lucide && window.lucide.createIcons());
                     });
                     this.$watch('legalTab', () => {
-                        this.$nextTick(() => lucide.createIcons());
+                        this.$nextTick(() => window.lucide && window.lucide.createIcons());
                     });
                 },
                 openLegal(tab) {

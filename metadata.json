@@ -1,0 +1,8 @@
+{
+  "name": "Hook Up Store",
+  "description": "Premium Marketplace Ecosystem connecting trusted suppliers with serious buyers since 2018.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
